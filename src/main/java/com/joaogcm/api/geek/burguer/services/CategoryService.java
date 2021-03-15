@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.joaogcm.api.geek.burguer.entities.Category;
 import com.joaogcm.api.geek.burguer.repositories.CategoryRepository;
+import com.joaogcm.api.geek.burguer.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoryService {
@@ -19,9 +20,9 @@ public class CategoryService {
 		List<Category> categories = categoryRepository.findAll();
 		return categories;
 	}
-	
+
 	public Category findById(Long idCategory) {
 		Optional<Category> findCategoryById = categoryRepository.findById(idCategory);
-		return findCategoryById.orElseThrow(() -> new RuntimeException("Nenhum id encontrado"));
+		return findCategoryById.orElseThrow(() -> new ObjectNotFoundException("Não encontrado: ID = " + idCategory));
 	}
 }
