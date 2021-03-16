@@ -13,6 +13,7 @@ import com.joaogcm.api.geek.burguer.entities.Category;
 import com.joaogcm.api.geek.burguer.entities.City;
 import com.joaogcm.api.geek.burguer.entities.Client;
 import com.joaogcm.api.geek.burguer.entities.Order;
+import com.joaogcm.api.geek.burguer.entities.OrderItem;
 import com.joaogcm.api.geek.burguer.entities.Payment;
 import com.joaogcm.api.geek.burguer.entities.PaymentWithBoleto;
 import com.joaogcm.api.geek.burguer.entities.PaymentWithCard;
@@ -24,6 +25,7 @@ import com.joaogcm.api.geek.burguer.repositories.AddressRepository;
 import com.joaogcm.api.geek.burguer.repositories.CategoryRepository;
 import com.joaogcm.api.geek.burguer.repositories.CityRepository;
 import com.joaogcm.api.geek.burguer.repositories.ClientRepository;
+import com.joaogcm.api.geek.burguer.repositories.OrderItemRepository;
 import com.joaogcm.api.geek.burguer.repositories.OrderRepository;
 import com.joaogcm.api.geek.burguer.repositories.PaymentRepository;
 import com.joaogcm.api.geek.burguer.repositories.ProductRepository;
@@ -56,6 +58,9 @@ public class InstantiateClasses implements CommandLineRunner {
 
 	@Autowired
 	private PaymentRepository paymentRepository;
+
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -212,5 +217,20 @@ public class InstantiateClasses implements CommandLineRunner {
 
 		orderRepository.saveAll(Arrays.asList(orderJoao, orderFlavia));
 		paymentRepository.saveAll(Arrays.asList(paymentJoao, paymentFlavia));
+
+		OrderItem orderItemOne = new OrderItem(productOne, orderJoao, 32.00, 23, 220.00);
+		OrderItem orderItemTwo = new OrderItem(productThree, orderFlavia, 00.00, 12, 313.90);
+		OrderItem orderItemThree = new OrderItem(productFour, orderFlavia, 10.40, 10, 412.90);
+		OrderItem orderItemFour = new OrderItem(productTwo, orderJoao, 00.00, 8, 300.00);
+
+		orderJoao.getItens().addAll(Arrays.asList(orderItemOne, orderItemTwo));
+		orderFlavia.getItens().addAll(Arrays.asList(orderItemThree, orderItemFour));
+
+		productOne.getItens().addAll(Arrays.asList(orderItemOne));
+		productTwo.getItens().addAll(Arrays.asList(orderItemFour));
+		productThree.getItens().addAll(Arrays.asList(orderItemTwo));
+		productFour.getItens().addAll(Arrays.asList(orderItemThree));
+
+		orderItemRepository.saveAll(Arrays.asList(orderItemOne, orderItemTwo, orderItemThree, orderItemFour));
 	}
 }

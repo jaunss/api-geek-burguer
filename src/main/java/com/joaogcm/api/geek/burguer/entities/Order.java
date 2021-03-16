@@ -2,6 +2,8 @@ package com.joaogcm.api.geek.burguer.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,8 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_order")
@@ -31,9 +36,13 @@ public class Order implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "orderPayment")
 	private Payment paymentOrder;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "client_order_id")
 	private Client clientOrder;
+	
+	@OneToMany(mappedBy = "idPK.order")
+	private Set<OrderItem> itens = new HashSet<OrderItem>();
 	
 	public Order() {
 		
@@ -84,6 +93,14 @@ public class Order implements Serializable {
 	
 	public void setClientOrder(Client clientOrder) {
 		this.clientOrder = clientOrder;
+	}
+	
+	public Set<OrderItem> getItens() {
+		return itens;
+	}
+	
+	public void setItens(Set<OrderItem> itens) {
+		this.itens = itens;
 	}
 
 	@Override

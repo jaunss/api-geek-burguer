@@ -2,7 +2,9 @@ package com.joaogcm.api.geek.burguer.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -26,10 +29,11 @@ public class Product implements Serializable {
 	private Double priceProduct;
 
 	@ManyToMany
-	@JoinTable(name = "tb_product_category",
-	joinColumns = @JoinColumn(name = "product_id"),
-	inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<Category> categories = new ArrayList<Category>();
+
+	@OneToMany(mappedBy = "idPK.product")
+	private Set<OrderItem> itens = new HashSet<OrderItem>();
 
 	public Product() {
 
@@ -71,6 +75,22 @@ public class Product implements Serializable {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public Set<OrderItem> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<OrderItem> itens) {
+		this.itens = itens;
+	}
+
+	public List<Order> getOrders() {
+		List<Order> listOrders = new ArrayList<Order>();
+		for (OrderItem order : itens) {
+			listOrders.add(order.getOrder());
+		}
+		return listOrders;
 	}
 
 	@Override
