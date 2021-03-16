@@ -6,6 +6,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.joaogcm.api.geek.burguer.entities.pk.OrderItemPK;
 
 @Entity
@@ -13,18 +14,19 @@ import com.joaogcm.api.geek.burguer.entities.pk.OrderItemPK;
 public class OrderItem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	@JsonIgnore
 	@EmbeddedId
 	private OrderItemPK idPK = new OrderItemPK();
-	
+
 	private Double discountItem;
 	private Integer amountItem;
 	private Double priceItem;
-	
+
 	public OrderItem() {
-		
+
 	}
-	
+
 	public OrderItem(Product product, Order order, Double discountItem, Integer amountItem, Double priceItem) {
 		idPK.setProduct(product);
 		idPK.setOrder(order);
@@ -32,51 +34,44 @@ public class OrderItem implements Serializable {
 		this.amountItem = amountItem;
 		this.priceItem = priceItem;
 	}
-	
+
 	public OrderItemPK getIdPK() {
 		return idPK;
 	}
-	
+
 	public void setIdPK(OrderItemPK idPK) {
 		this.idPK = idPK;
 	}
-	
+
 	public Product getProduct() {
 		return idPK.getProduct();
 	}
-	
-	public void setProduct(Product product) {
-		this.idPK.setProduct(product);
-	}
-	
+
+	@JsonIgnore
 	public Order getOrder() {
 		return idPK.getOrder();
 	}
-	
-	public void setOrder(Order order) {
-		this.idPK.setOrder(order);
-	}
-	
+
 	public Double getDiscountItem() {
 		return discountItem;
 	}
-	
+
 	public void setDiscountItem(Double discountItem) {
 		this.discountItem = discountItem;
 	}
-	
+
 	public Integer getAmountItem() {
 		return amountItem;
 	}
-	
+
 	public void setAmountItem(Integer amountItem) {
 		this.amountItem = amountItem;
 	}
-	
+
 	public Double getPriceItem() {
 		return priceItem;
 	}
-	
+
 	public void setPriceItem(Double priceItem) {
 		this.priceItem = priceItem;
 	}
