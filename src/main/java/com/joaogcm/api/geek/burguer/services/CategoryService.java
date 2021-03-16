@@ -23,6 +23,6 @@ public class CategoryService {
 
 	public Category findById(Long idCategory) {
 		Optional<Category> findCategoryById = categoryRepository.findById(idCategory);
-		return findCategoryById.orElseThrow(() -> new ObjectNotFoundException("Não encontrado: ID = " + idCategory));
+		return findCategoryById.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada: ID = " + idCategory));
 	}
 }

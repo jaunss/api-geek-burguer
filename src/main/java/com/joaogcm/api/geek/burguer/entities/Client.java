@@ -31,7 +31,7 @@ public class Client implements Serializable {
 	private String cpfClient;
 	private Integer typeClient;
 
-	@OneToMany(mappedBy = "address")
+	@OneToMany(mappedBy = "client")
 	private List<Address> addresses = new ArrayList<Address>();
 
 	@ElementCollection

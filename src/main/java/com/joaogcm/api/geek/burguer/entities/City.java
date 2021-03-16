@@ -29,9 +29,10 @@ public class City implements Serializable {
 
 	}
 
-	public City(Long idCity, String nameCity) {
+	public City(Long idCity, String nameCity, State state) {
 		this.idCity = idCity;
 		this.nameCity = nameCity;
+		this.state = state;
 	}
 
 	public Long getIdCity() {
