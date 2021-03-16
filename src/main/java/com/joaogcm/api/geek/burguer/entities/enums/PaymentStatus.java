@@ -4,24 +4,24 @@ public enum PaymentStatus {
 
 	AwaitingPayment(1, "Awaiting Payment"), Pending(2, "Pending"), Settled(3, "Settled"), Canceled(4, "Canceled");
 
-	private Integer statusPayment;
+	private Integer paymentStatus;
 	private String descriptionPayment;
 
 	private PaymentStatus() {
 
 	}
 
-	private PaymentStatus(Integer statusPayment, String descriptionPayment) {
-		this.statusPayment = statusPayment;
+	private PaymentStatus(Integer paymentStatus, String descriptionPayment) {
+		this.paymentStatus = paymentStatus;
 		this.descriptionPayment = descriptionPayment;
 	}
 
-	public Integer getStatusPayment() {
-		return statusPayment;
+	public Integer getPaymentStatus() {
+		return paymentStatus;
 	}
 
-	public void setStatusPayment(Integer statusPayment) {
-		this.statusPayment = statusPayment;
+	public void setPaymentStatus(Integer paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 	public String getDescriptionPayment() {
@@ -38,7 +38,7 @@ public enum PaymentStatus {
 		}
 
 		for (PaymentStatus payment : PaymentStatus.values()) {
-			if (code.equals(payment.getStatusPayment())) {
+			if (code.equals(payment.getPaymentStatus())) {
 				return payment;
 			}
 		}

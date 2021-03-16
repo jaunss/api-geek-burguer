@@ -1,5 +1,6 @@
 package com.joaogcm.api.geek.burguer.instantiate;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,20 @@ import com.joaogcm.api.geek.burguer.entities.Address;
 import com.joaogcm.api.geek.burguer.entities.Category;
 import com.joaogcm.api.geek.burguer.entities.City;
 import com.joaogcm.api.geek.burguer.entities.Client;
+import com.joaogcm.api.geek.burguer.entities.Order;
+import com.joaogcm.api.geek.burguer.entities.Payment;
+import com.joaogcm.api.geek.burguer.entities.PaymentWithBoleto;
+import com.joaogcm.api.geek.burguer.entities.PaymentWithCard;
 import com.joaogcm.api.geek.burguer.entities.Product;
 import com.joaogcm.api.geek.burguer.entities.State;
+import com.joaogcm.api.geek.burguer.entities.enums.PaymentStatus;
 import com.joaogcm.api.geek.burguer.entities.enums.TypeClient;
 import com.joaogcm.api.geek.burguer.repositories.AddressRepository;
 import com.joaogcm.api.geek.burguer.repositories.CategoryRepository;
 import com.joaogcm.api.geek.burguer.repositories.CityRepository;
 import com.joaogcm.api.geek.burguer.repositories.ClientRepository;
+import com.joaogcm.api.geek.burguer.repositories.OrderRepository;
+import com.joaogcm.api.geek.burguer.repositories.PaymentRepository;
 import com.joaogcm.api.geek.burguer.repositories.ProductRepository;
 import com.joaogcm.api.geek.burguer.repositories.StateRepository;
 
@@ -39,12 +47,20 @@ public class InstantiateClasses implements CommandLineRunner {
 
 	@Autowired
 	private ClientRepository clientRepository;
-	
+
 	@Autowired
 	private AddressRepository addressRepository;
 
+	@Autowired
+	private OrderRepository orderRepository;
+
+	@Autowired
+	private PaymentRepository paymentRepository;
+
 	@Override
 	public void run(String... args) throws Exception {
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 		Category categoryOne = new Category(null, "Drinks");
 		Category categoryTwo = new Category(null, "Hamburguers");
@@ -180,5 +196,21 @@ public class InstantiateClasses implements CommandLineRunner {
 
 		clientRepository.saveAll(Arrays.asList(clientJoao, clientFlavia));
 		addressRepository.saveAll(Arrays.asList(addressJoao, addressFlavia));
+
+		Order orderJoao = new Order(null, simpleDateFormat.parse("16/03/2021 10:58:34"), addressJoao, clientJoao);
+		Order orderFlavia = new Order(null, simpleDateFormat.parse("16/03/2021 11:03:23"), addressFlavia, clientFlavia);
+
+		Payment paymentJoao = new PaymentWithCard(null, PaymentStatus.Pending, orderJoao, 2);
+		orderJoao.setPaymentOrder(paymentJoao);
+
+		Payment paymentFlavia = new PaymentWithBoleto(null, PaymentStatus.Settled, orderFlavia,
+				simpleDateFormat.parse("17/04/2021 23:59:59"), simpleDateFormat.parse("11/04/2021 12:54:55"));
+		orderFlavia.setPaymentOrder(paymentFlavia);
+
+		clientJoao.getOrders().addAll(Arrays.asList(orderJoao));
+		clientFlavia.getOrders().addAll(Arrays.asList(orderFlavia));
+
+		orderRepository.saveAll(Arrays.asList(orderJoao, orderFlavia));
+		paymentRepository.saveAll(Arrays.asList(paymentJoao, paymentFlavia));
 	}
 }
