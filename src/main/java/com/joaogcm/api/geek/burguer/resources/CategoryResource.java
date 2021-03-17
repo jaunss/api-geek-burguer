@@ -2,6 +2,7 @@ package com.joaogcm.api.geek.burguer.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.joaogcm.api.geek.burguer.entities.Category;
+import com.joaogcm.api.geek.burguer.entities.dto.CategoryDTO;
 import com.joaogcm.api.geek.burguer.services.CategoryService;
 
 @RestController
@@ -26,9 +28,11 @@ public class CategoryResource {
 	private CategoryService categoryService;
 
 	@GetMapping
-	public ResponseEntity<?> findAllCategories() {
+	public ResponseEntity<List<CategoryDTO>> findAllCategories() {
 		List<Category> categories = categoryService.findAllCategories();
-		return ResponseEntity.ok().body(categories);
+		List<CategoryDTO> categoriesDTO = categories.stream().map(cat -> new CategoryDTO(cat))
+				.collect(Collectors.toList());
+		return ResponseEntity.ok().body(categoriesDTO);
 	}
 
 	@GetMapping(value = "/{idCategory}")
