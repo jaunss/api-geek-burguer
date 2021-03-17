@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.joaogcm.api.geek.burguer.entities.Category;
@@ -57,5 +60,10 @@ public class CategoryService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível remover uma Categoria que possui Produtos.");
 		}
+	}
+	
+	public Page<Category> findPagesOfCategory(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequestOfCategory = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return categoryRepository.findAll(pageRequestOfCategory);
 	}
 }
