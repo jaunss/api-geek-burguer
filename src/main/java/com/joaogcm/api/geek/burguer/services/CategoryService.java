@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.joaogcm.api.geek.burguer.entities.Category;
+import com.joaogcm.api.geek.burguer.entities.dto.CategoryDTO;
 import com.joaogcm.api.geek.burguer.repositories.CategoryRepository;
 import com.joaogcm.api.geek.burguer.services.exceptions.DataIntegrityException;
 import com.joaogcm.api.geek.burguer.services.exceptions.ObjectNotFoundException;
@@ -61,9 +62,13 @@ public class CategoryService {
 			throw new DataIntegrityException("Não é possível remover uma Categoria que possui Produtos.");
 		}
 	}
-	
+
 	public Page<Category> findPagesOfCategory(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequestOfCategory = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return categoryRepository.findAll(pageRequestOfCategory);
+	}
+
+	public Category fromDTO(CategoryDTO categoryDTO) {
+		return new Category(categoryDTO.getIdCategory(), categoryDTO.getNameCategory());
 	}
 }

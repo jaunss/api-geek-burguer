@@ -10,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "tb_category")
@@ -20,6 +23,9 @@ public class Category implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long idCategory;
+	
+	@NotEmpty(message = "Preencimento obrigatório.")
+	@Length(min = 5, max = 80, message = "O nome deve ter entre 5 e 80 caracteres.")
 	private String nameCategory;
 
 	@ManyToMany(mappedBy = "categories")

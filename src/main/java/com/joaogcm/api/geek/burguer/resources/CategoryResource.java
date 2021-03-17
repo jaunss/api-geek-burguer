@@ -4,9 +4,10 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,15 +46,18 @@ public class CategoryResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insertCategory(@RequestBody Category category) {
+	public ResponseEntity<?> insertCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+		Category category = categoryService.fromDTO(categoryDTO);
 		category = categoryService.insertCategory(category);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idCategory}")
 				.buildAndExpand(category.getIdCategory()).toUri();
-		return ResponseEntity.created(uri).body(category);
+		return ResponseEntity.created(uri).build();
 	}
 
 	@PutMapping(value = "/{idCategory}")
-	public ResponseEntity<?> updateCategoryById(@PathVariable Long idCategory, @RequestBody Category category) {
+	public ResponseEntity<?> updateCategoryById(@PathVariable Long idCategory,
+			@Valid @RequestBody CategoryDTO categoryDTO) {
+		Category category = categoryService.fromDTO(categoryDTO);
 		category.setIdCategory(idCategory);
 		category = categoryService.updateCategoryById(category);
 		return ResponseEntity.noContent().build();
@@ -64,14 +68,14 @@ public class CategoryResource {
 		categoryService.deleteCategoryById(idCategory);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@GetMapping(value = "/page")
 	public ResponseEntity<Page<CategoryDTO>> findPagesOfCategory(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
 			@RequestParam(value = "orderBy", defaultValue = "nameCategory") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
-		
+
 		Page<Category> categories = categoryService.findPagesOfCategory(page, linesPerPage, orderBy, direction);
 		Page<CategoryDTO> categoriesDTO = categories.map(cat -> new CategoryDTO(cat));
 		return ResponseEntity.ok().body(categoriesDTO);
